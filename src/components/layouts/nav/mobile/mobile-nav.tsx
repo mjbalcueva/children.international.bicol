@@ -46,6 +46,7 @@ export function MobileNav() {
                       <div className="flex flex-col space-y-2">
                         {link.subLinks.map((subLink) => (
                           <Link
+                            key={index}
                             href={String(subLink.href)}
                             className={cn(
                               'text-foreground/70 transition-colors hover:text-foreground',
@@ -60,7 +61,7 @@ export function MobileNav() {
                     </AccordionContent>
                   </AccordionItem>
                 ) : (
-                  <Link href={link.href!} onClick={() => setIsOpen(false)}>
+                  <Link key={index} href={link.href!} onClick={() => setIsOpen(false)}>
                     <Button
                       variant="link"
                       className="w-full justify-start rounded-none border-b px-0 py-[26px] text-sm capitalize underline-offset-1"
