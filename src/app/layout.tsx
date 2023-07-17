@@ -11,6 +11,9 @@ import { TailwindIndicator } from '@/components/shared/tailwind-indicator'
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
