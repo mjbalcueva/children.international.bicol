@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrationsV
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String   @map(name: "first_name")
+  lastName  String   @map(name: "last_name")
+  email     String   @unique
+  password  String
+  role      ROLE     @default(SR_OFFICER)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map(name: "users")
+}
+
+enum ROLE {
+  ADMIN
+  CC_COORDINATOR
+  SR_OFFICER
+}
