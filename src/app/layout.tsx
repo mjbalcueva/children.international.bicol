@@ -3,6 +3,7 @@ import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { NextAuthProvider } from '@/providers/next-auth-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
+import { ToasterProvider } from '@/providers/toaster-provider'
 
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/lib/fonts'
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NextAuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+            <ToasterProvider />
             <TailwindIndicator />
           </ThemeProvider>
         </NextAuthProvider>
