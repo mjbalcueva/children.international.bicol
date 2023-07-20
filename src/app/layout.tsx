@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 
 import type { Metadata } from 'next'
+import { NextAuthProvider } from '@/providers/next-auth-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 
 import { siteConfig } from '@/config/site'
@@ -20,10 +21,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <TailwindIndicator />
-        </ThemeProvider>
+        <NextAuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <TailwindIndicator />
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )
