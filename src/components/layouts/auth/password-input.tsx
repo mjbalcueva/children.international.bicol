@@ -1,5 +1,7 @@
 'use client'
 
+import '@/styles/hide-password-toggle.css'
+
 import { forwardRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
