@@ -34,11 +34,12 @@ export function RegisterForm() {
     setIsLoading(true)
 
     await axios
-      .post('/api/signup', {
+      .post('/api/register', {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         password: data.password,
+        confirmPassword: data.confirmPassword,
       })
       .then(() => {
         toast({
