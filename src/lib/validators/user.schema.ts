@@ -4,32 +4,30 @@ export const RegisterUserSchema = z
   .object({
     firstName: z
       .string({
-        required_error: 'Name is required',
+        required_error: 'First name is required',
       })
-      .min(1, 'Full name is required'),
+      .min(1, 'First name must be at least 1 character'),
     lastName: z
       .string({
-        required_error: 'Name is required',
+        required_error: 'Last name is required',
       })
-      .min(1, 'Full name is required'),
+      .min(1, 'Last name must be at least 1 character'),
     email: z
       .string({
         required_error: 'Email is required',
       })
-      .min(1, 'Email is required')
+      .min(1, 'Email must be at least 1 character')
       .email('Email is invalid'),
     password: z
       .string({
         required_error: 'Password is required',
       })
-      .min(1, 'Password is required')
       .min(8, 'Password must be more than 8 characters')
       .max(32, 'Password must be less than 32 characters'),
     confirmPassword: z
       .string({
-        required_error: 'Retype your password',
+        required_error: 'Please retype your password',
       })
-      .min(1, 'Password confirmation is required')
       .min(8, 'Password must be more than 8 characters')
       .max(32, 'Password must be less than 32 characters'),
   })
@@ -43,13 +41,12 @@ export const LoginUserSchema = z.object({
     .string({
       required_error: 'Email is required',
     })
-    .min(1, 'Email is required')
+    .min(1, 'Email must be at least 1 character')
     .email('Email is invalid'),
   password: z
     .string({
       required_error: 'Password is required',
     })
-    .min(1, 'Password is required')
     .min(8, 'Password must be more than 8 characters')
     .max(32, 'Password must be less than 32 characters'),
 })
