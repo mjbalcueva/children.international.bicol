@@ -18,7 +18,6 @@ export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
-  // react-hook-form
   const form = useForm<RegisterUserSchemaInput>({
     resolver: zodResolver(RegisterUserSchema),
     defaultValues: {

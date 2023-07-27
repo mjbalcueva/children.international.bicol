@@ -4,26 +4,19 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import { LoginUserSchema, LoginUserSchemaInput } from '@/lib/validators/user.schema'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { PasswordInput } from '@/components/layouts/auth/password-input'
 import { Icons } from '@/components/shared/icons'
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
-})
-
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
-  // react-hook-form
+
   const form = useForm<LoginUserSchemaInput>({
     resolver: zodResolver(LoginUserSchema),
     defaultValues: {
@@ -31,8 +24,10 @@ export function LoginForm() {
       password: '',
     },
   })
+
   async function onSubmit(data: LoginUserSchemaInput) {
     setIsLoading(true)
+
     signIn('credentials', {
       ...data,
       redirect: false,
