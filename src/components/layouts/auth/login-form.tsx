@@ -81,8 +81,8 @@ export function LoginForm() {
         />
         <Button disabled={isLoading} type="submit">
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
-          Sign in
-          <span className="sr-only">Sign in</span>
+          Log in
+          <span className="sr-only">Log in</span>
         </Button>
       </form>
     </Form>
