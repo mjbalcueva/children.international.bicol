@@ -1,27 +1,25 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider          = "postgresql"
-  // url      = env("DATABASE_URL")
-  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrationsV
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrationsV
 }
 
 model User {
-  id        String   @id @default(cuid())
-  firstName String   @map(name: "first_name")
-  lastName  String   @map(name: "last_name")
-  email     String   @unique
+  id        String @id @default(cuid())
+  firstName String @map(name: "first_name")
+  lastName  String @map(name: "last_name")
+  email     String @unique
   password  String
-  role      ROLE     @default(SR_OFFICER)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  role      ROLE   @default(SR_OFFICER)
+
+  Validated   ChildRecord[] @relation("Validated")
+  Interviewed ChildRecord[] @relation("Interviewed")
 
   @@map(name: "users")
 }
@@ -30,4 +28,75 @@ enum ROLE {
   ADMIN
   CC_COORDINATOR
   SR_OFFICER
+}
+
+model ChildRecord {
+  id           String   @id @default(cuid()) @map("provisional_id")
+  dateOfVisit  DateTime @map("date_of_visit")
+  photoNumbers String   @map("photo_numbers")
+  sector       String
+  specialCase  Boolean  @default(false) @map("special_request_child")
+
+  interviewedById String @map("interviewed_by")
+  validatedById   String @map("validated_by")
+  ValidatedBy     User   @relation("Validated", fields: [validatedById], references: [id])
+  InterviewedBy   User   @relation("Interviewed", fields: [interviewedById], references: [id])
+
+  @@map(name: "child_records")
+}
+
+model Child {
+  id        String   @id @default(cuid())
+  firstName String   @map(name: "first_name")
+  lastName  String   @map(name: "last_name")
+  birthDate DateTime @map("date_of_birth")
+  gender    GENDER
+  status    String   @default("Inactive")
+
+  @@map(name: "children")
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+model ChildInformation {
+  id              String  @id @default(cuid())
+  adConsent       Boolean @default(false) @map(name: "ad_consent")
+  chores          String
+  eyeColor        String  @map(name: "eye_color")
+  hairColor       String  @map(name: "hair_color")
+  healthIssues    String  @map(name: "health_issues")
+  height          Float   @map(name: "height_cm")
+  hobbies         String
+  pastimes        String
+  sleepsOn        String  @map(name: "sleeps_on")
+  spokenLanguages String  @map(name: "spoken_languages")
+  weight          Float   @map(name: "weight_kg")
+
+  @@map(name: "children_information")
+}
+
+model Family {
+  id String @id @default(cuid()) @map("family_id")
+
+  @@map(name: "family_records")
+}
+
+model Guardian {
+  id         String   @id @default(cuid())
+  firstName  String   @map(name: "first_name")
+  lastName   String   @map(name: "last_name")
+  occupation String
+  relation   RELATION
+
+  @@map(name: "guardians")
+}
+
+enum RELATION {
+  FATHER
+  MOTHER
+  GUARDIAN
 }
