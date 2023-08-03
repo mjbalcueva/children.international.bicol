@@ -54,8 +54,8 @@ model Child {
   gender    GENDER
 
   childInformation ChildInformation?
-  childRecordId    String?           @unique
-  familyId         String
+  childRecordId    String?           @unique @map("child_record_id")
+  familyId         String            @map("family_id")
   childRecord      ChildRecord?      @relation(fields: [childRecordId], references: [id])
   family           Family            @relation(fields: [familyId], references: [id])
 
@@ -82,8 +82,8 @@ model ChildInformation {
   spokenLanguages String  @map(name: "spoken_languages")
   weight          Float   @map(name: "weight_kg")
 
-  childId String @unique
-  child   Child  @relation(fields: [childId], references: [id])
+  childId String @unique @map(name: "child_id")
+  child   Child  @relation(fields: [childId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@map(name: "children_information")
 }
@@ -103,7 +103,7 @@ model Guardian {
   occupation String
   relation   RELATION
 
-  familyId String
+  familyId String @map("family_id")
   family   Family @relation(fields: [familyId], references: [id])
 
   @@map(name: "guardians")

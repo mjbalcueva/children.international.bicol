@@ -76,6 +76,33 @@ async function main() {
     ],
   })
 
+  const fam5 = await db.family.create({
+    data: {
+      children: {
+        create: [
+          {
+            firstName: 'A',
+            lastName: 'A',
+            birthDate: new Date('1999-01-01'),
+            gender: 'FEMALE',
+          },
+          {
+            firstName: 'B',
+            lastName: 'B',
+            birthDate: new Date('1998-01-01'),
+            gender: 'MALE',
+          },
+          {
+            firstName: 'C',
+            lastName: 'C',
+            birthDate: new Date('1997-01-01'),
+            gender: 'OTHERS',
+          },
+        ],
+      },
+    },
+  })
+
   const children = await db.child.createMany({
     data: [
       {
@@ -212,6 +239,25 @@ async function main() {
         },
       },
       childRecordId: childRecord2.id,
+    },
+  })
+
+  const childRecord3 = await db.childRecord.create({
+    data: {
+      dateOfVisit: new Date('2021-03-03'),
+      photoNumbers: '03',
+      sector: 'C',
+      interviewerId: user3.id,
+      validatorId: user2.id,
+      child: {
+        create: {
+          firstName: 'David',
+          lastName: 'Magdalene',
+          birthDate: new Date('2008-09-10'),
+          familyId: fam1.id,
+          gender: 'MALE',
+        },
+      },
     },
   })
 }
