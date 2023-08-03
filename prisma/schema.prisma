@@ -18,8 +18,8 @@ model User {
   password  String
   role      ROLE   @default(SR_OFFICER)
 
-  Validated   ChildRecord[] @relation("Validated")
-  Interviewed ChildRecord[] @relation("Interviewed")
+  interviewed ChildRecord[] @relation("Interview")
+  validated   ChildRecord[] @relation("Validate")
 
   @@map(name: "users")
 }
@@ -37,10 +37,11 @@ model ChildRecord {
   sector       String
   specialCase  Boolean  @default(false) @map("special_request_child")
 
-  interviewedById String @map("interviewed_by")
-  validatedById   String @map("validated_by")
-  ValidatedBy     User   @relation("Validated", fields: [validatedById], references: [id])
-  InterviewedBy   User   @relation("Interviewed", fields: [interviewedById], references: [id])
+  child         Child?
+  interviewerId String @map("interviewed_by")
+  validatorId   String @map("validated_by")
+  interviewer   User   @relation("Interview", fields: [interviewerId], references: [id])
+  validator     User   @relation("Validate", fields: [validatorId], references: [id])
 
   @@map(name: "child_records")
 }
@@ -51,7 +52,12 @@ model Child {
   lastName  String   @map(name: "last_name")
   birthDate DateTime @map("date_of_birth")
   gender    GENDER
-  status    String   @default("Inactive")
+
+  childInformation ChildInformation?
+  childRecordId    String?           @unique
+  familyId         String
+  childRecord      ChildRecord?      @relation(fields: [childRecordId], references: [id])
+  family           Family            @relation(fields: [familyId], references: [id])
 
   @@map(name: "children")
 }
@@ -68,7 +74,7 @@ model ChildInformation {
   chores          String
   eyeColor        String  @map(name: "eye_color")
   hairColor       String  @map(name: "hair_color")
-  healthIssues    String  @map(name: "health_issues")
+  healthIssues    String  @default("NONE") @map(name: "health_issues")
   height          Float   @map(name: "height_cm")
   hobbies         String
   pastimes        String
@@ -76,11 +82,16 @@ model ChildInformation {
   spokenLanguages String  @map(name: "spoken_languages")
   weight          Float   @map(name: "weight_kg")
 
+  childId String @unique
+  child   Child  @relation(fields: [childId], references: [id])
+
   @@map(name: "children_information")
 }
 
 model Family {
-  id String @id @default(cuid()) @map("family_id")
+  id        String     @id @default(cuid()) @map("family_id")
+  children  Child[]
+  guardians Guardian[]
 
   @@map(name: "family_records")
 }
@@ -91,6 +102,9 @@ model Guardian {
   lastName   String   @map(name: "last_name")
   occupation String
   relation   RELATION
+
+  familyId String
+  family   Family @relation(fields: [familyId], references: [id])
 
   @@map(name: "guardians")
 }
