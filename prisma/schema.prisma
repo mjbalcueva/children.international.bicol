@@ -54,6 +54,7 @@ model Child {
   gender    GENDER
 
   childInformation ChildInformation?
+  school           School?
   childRecordId    String?           @unique @map("child_record_id")
   familyId         String            @map("family_id")
   childRecord      ChildRecord?      @relation(fields: [childRecordId], references: [id])
@@ -88,10 +89,30 @@ model ChildInformation {
   @@map(name: "children_information")
 }
 
+model School {
+  id                            String  @id @default(cuid())
+  attendsSchool                 Boolean @default(false) @map("attends_school")
+  whyNot                        String? @map("why_not")
+  schoolName                    String? @map("school_name")
+  schoolType                    String? @map("school_type")
+  academicYear                  String? @map("academic_year")
+  schoolTranspo                 String? @map("school_transportation")
+  timeToSchool                  String? @map("time_to_school")
+  mostRecentGradeLevelCompleted String? @map("most_recent_grade_level_completed")
+  currentGradeLevel             String? @map("current_grade_level")
+  favoriteSubjects              String? @map("favorite_subjects")
+
+  childId String @unique @map("child_id")
+  child   Child  @relation(fields: [childId], references: [id])
+
+  @@map("school_records")
+}
+
 model Family {
-  id        String     @id @default(cuid()) @map("family_id")
+  id        String      @id @default(cuid()) @map("family_id")
   children  Child[]
   guardians Guardian[]
+  household Household[]
 
   @@map(name: "family_records")
 }
@@ -107,6 +128,29 @@ model Guardian {
   family   Family @relation(fields: [familyId], references: [id])
 
   @@map(name: "guardians")
+}
+
+model Household {
+  id               String  @id @default(cuid())
+  address          String
+  roomTypeNumber   String  @map("room_type_number")
+  walls            String
+  roof             String
+  floor            String
+  numberOfBeds     Int     @map("number_of_beds")
+  numberOfPeople   Int     @map("number_of_people")
+  electricity      Boolean @default(false)
+  waterSource      Boolean @default(false) @map("water_source")
+  cookingFacility  Boolean @default(false) @map("cooking_facility")
+  sanitaryFacility Boolean @default(false) @map("sanitary_facility")
+  overallCondition String  @map("overall_condition")
+  ownership        String  @map("ownership_status")
+  comments         String
+
+  familyId String
+  family   Family @relation(fields: [familyId], references: [id])
+
+  @@map("household_records")
 }
 
 enum RELATION {

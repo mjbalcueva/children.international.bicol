@@ -260,6 +260,62 @@ async function main() {
       },
     },
   })
+
+  const childRecord4 = await db.childRecord.create({
+    data: {
+      dateOfVisit: new Date('2021-04-04'),
+      photoNumbers: '04',
+      sector: 'D',
+      interviewerId: user3.id,
+      validatorId: user2.id,
+      child: {
+        create: {
+          firstName: 'Elijah',
+          lastName: 'Black',
+          birthDate: new Date('2009-10-11'),
+          gender: 'OTHERS',
+          childInformation: {
+            create: {
+              chores: 'Washing dishes',
+              eyeColor: 'BROWN',
+              hairColor: 'BLACK',
+              height: 124.2,
+              weight: 35.1,
+              hobbies: 'Sun bathing',
+              pastimes: 'Arts and crafts',
+              sleepsOn: 'BED',
+              spokenLanguages: 'Filipino',
+              adConsent: true,
+            },
+          },
+          family: {
+            create: {
+              guardians: {
+                create: [
+                  { firstName: 'Eliot', lastName: 'Black', occupation: 'Seaman', relation: 'FATHER' },
+                  { firstName: 'Elisha', lastName: 'Black', occupation: 'Entrepreneur', relation: 'MOTHER' },
+                ],
+              },
+              household: {
+                create: {
+                  address: '1234 Main Street',
+                  comments: 'This is a comment',
+                  floor: '1',
+                  numberOfBeds: 2,
+                  numberOfPeople: 4,
+                  overallCondition: 'GOOD',
+                  ownership: 'RENTED',
+                  roof: 'CONCRETE',
+                  roomTypeNumber: '1',
+                  walls: 'CONCRETE',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
 }
 
 main()
