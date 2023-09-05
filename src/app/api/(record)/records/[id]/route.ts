@@ -9,7 +9,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       child: {
         include: {
           childInformation: true,
-          family: {
+          familyRecord: {
             include: {
               guardians: true,
               children: {
