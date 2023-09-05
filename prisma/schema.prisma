@@ -53,12 +53,12 @@ model Child {
   birthDate DateTime @map("date_of_birth")
   gender    GENDER
 
-  childInformation ChildInformation?
-  school           School?
-  childRecordId    String?           @unique @map("child_record_id")
-  familyId         String            @map("family_id")
-  childRecord      ChildRecord?      @relation(fields: [childRecordId], references: [id])
-  family           Family            @relation(fields: [familyId], references: [id])
+  childInformation  ChildInformation?
+  schoolInformation SchoolInformation?
+  childRecordId     String?            @unique @map("child_record_id")
+  familyRecordId    String             @map("family_id")
+  childRecord       ChildRecord?       @relation(fields: [childRecordId], references: [id])
+  familyRecord      FamilyRecords      @relation(fields: [familyRecordId], references: [id])
 
   @@map(name: "children")
 }
@@ -89,15 +89,15 @@ model ChildInformation {
   @@map(name: "children_information")
 }
 
-model School {
+model SchoolInformation {
   id                            String  @id @default(cuid())
   attendsSchool                 Boolean @default(false) @map("attends_school")
   whyNot                        String? @map("why_not")
-  schoolName                    String? @map("school_name")
-  schoolType                    String? @map("school_type")
+  name                          String?
+  type                          String?
   academicYear                  String? @map("academic_year")
-  schoolTranspo                 String? @map("school_transportation")
-  timeToSchool                  String? @map("time_to_school")
+  transportation                String?
+  travelTime                    String? @map("travel_time")
   mostRecentGradeLevelCompleted String? @map("most_recent_grade_level_completed")
   currentGradeLevel             String? @map("current_grade_level")
   favoriteSubjects              String? @map("favorite_subjects")
@@ -105,14 +105,14 @@ model School {
   childId String @unique @map("child_id")
   child   Child  @relation(fields: [childId], references: [id])
 
-  @@map("school_records")
+  @@map("school_information")
 }
 
-model Family {
-  id        String      @id @default(cuid()) @map("family_id")
-  children  Child[]
-  guardians Guardian[]
-  household Household[]
+model FamilyRecords {
+  id                   String                 @id @default(cuid()) @map("id")
+  children             Child[]
+  guardians            Guardian[]
+  householdInformation HouseholdInformation[]
 
   @@map(name: "family_records")
 }
@@ -124,13 +124,13 @@ model Guardian {
   occupation String
   relation   RELATION
 
-  familyId String @map("family_id")
-  family   Family @relation(fields: [familyId], references: [id])
+  familyRecordsId String        @map("family_id")
+  familyRecords   FamilyRecords @relation(fields: [familyRecordsId], references: [id])
 
   @@map(name: "guardians")
 }
 
-model Household {
+model HouseholdInformation {
   id               String  @id @default(cuid())
   address          String
   roomTypeNumber   String  @map("room_type_number")
@@ -138,7 +138,7 @@ model Household {
   roof             String
   floor            String
   numberOfBeds     Int     @map("number_of_beds")
-  numberOfPeople   Int     @map("number_of_people")
+  numberOfPeople   Int     @map("number_of_peeople")
   electricity      Boolean @default(false)
   waterSource      Boolean @default(false) @map("water_source")
   cookingFacility  Boolean @default(false) @map("cooking_facility")
@@ -147,10 +147,10 @@ model Household {
   ownership        String  @map("ownership_status")
   comments         String
 
-  familyId String
-  family   Family @relation(fields: [familyId], references: [id])
+  familyRecordsId String        @map("family_id")
+  familyRecords   FamilyRecords @relation(fields: [familyRecordsId], references: [id])
 
-  @@map("household_records")
+  @@map("household_information")
 }
 
 enum RELATION {
